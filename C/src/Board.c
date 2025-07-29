@@ -1,5 +1,6 @@
-// Board.cpp
+// Board.c
 
+#include "datatypes.h"
 #include "movegen.h"
 #include "Board.h"
 #include "bitboard.h"

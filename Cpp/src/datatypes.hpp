@@ -23,16 +23,8 @@ enum { EMPTY, wP, wN, wB, wR, wQ, wK, bP, bN, bB, bR, bQ, bK };
 enum { NONE, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING };
 extern int piece_type[13];
 extern int piece_col[13];
-extern bool piece_big[13];
-extern bool piece_maj[13];
-extern bool piece_min[13];
 
 extern int Mirror64[64];
-
-extern Bitboard file_masks[8];
-extern Bitboard rank_masks[8];
-extern Bitboard adjacent_files[8];
-extern Bitboard passer_masks[8];
 
 const std::string ascii_pieces = ".PNBRQKpnbrqk";
 

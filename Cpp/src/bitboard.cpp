@@ -1,13 +1,13 @@
 // bitboard.cpp
 
-#include <bit>
-#include <bitset>
-#include <cstdint>
-#include <algorithm>
-#include <iostream>
 #include "datatypes.hpp"
 #include "bitboard.hpp"
 #include "Board.hpp"
+
+#include <bit>
+#include <bitset>
+#include <cstdint>
+#include <iostream>
 
 /*
     Bit Manipulation

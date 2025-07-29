@@ -1,12 +1,12 @@
 // moveio.cpp
 
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <vector>
 #include "moveio.hpp"
 #include "movegen.hpp"
 #include "datatypes.hpp"
+
+#include <iostream>
+#include <string>
+#include <sstream>
 
 // print move (for UCI purposes)
 std::string print_move(int move) {

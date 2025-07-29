@@ -5,9 +5,6 @@
 //                   EMPTY,    wP,    wN,    wB,    wR,    wQ,    wK,    bP,    bN,    bB,    bR,    bQ,    bK
 int piece_type[13] = { NONE, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING,  PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING };
 int piece_col[13] = { BOTH, WHITE, WHITE, WHITE, WHITE, WHITE, WHITE, BLACK, BLACK, BLACK, BLACK, BLACK, BLACK };
-bool piece_big[13] = { false, false, true, true, true, true, true, false, true, true, true, true, true };
-bool piece_maj[13] = { false, false, false, false, true, true, true, false, false, false, true, true, true };
-bool piece_min[13] = { false, false, true, true, false, false, false, false, true, true, false, false, false };
 
 // Mirrors the square indices by row
 int Mirror64[64] = {

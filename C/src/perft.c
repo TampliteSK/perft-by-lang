@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
 // Get time in milliseconds
 uint64_t get_time_ms() {
@@ -27,7 +28,7 @@ uint64_t run_perft(Board* pos, uint8_t depth, bool print_info) {
     uint64_t nodes = 0;
     uint64_t start = 0;
 
-    MoveList* move_list;
+    MoveList* move_list = (MoveList*)malloc(sizeof(MoveList));
     init_move_list(move_list);
     generate_moves(pos, move_list, FALSE);
 
@@ -68,7 +69,7 @@ uint64_t run_perft(Board* pos, uint8_t depth, bool print_info) {
         uint64_t time = get_time_ms() - start;
         printf("\n    Depth: %d\n"
                "    Nodes: %llu\n"
-               "     Time: %llu ms (%.2f s)\n"
+               "     Time: %llums (%.2fs)\n"
                "      NPS: %d\n\n",
                depth, nodes, time, (double)time / 1000, (int)(nodes / (double)time * 1000));
     }

@@ -1,14 +1,12 @@
 // movegen.cpp
 
-#include <vector>
-#include <cstdint>
-#include <iostream>
-#include <algorithm>
 #include "movegen.hpp"
 #include "attack.hpp"
 #include "attackgen.hpp"
 #include "bitboard.hpp"
 #include "makemove.hpp"
+
+#include <cstdint>
 
 void init_move_list(MoveList& move_list) {
     for (int i = 0; i < MAX_LEGAL_MOVES; i++) {

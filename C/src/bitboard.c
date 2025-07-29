@@ -1,4 +1,4 @@
-// bitboard.cpp
+// bitboard.c
 
 #include "datatypes.h"
 #include "bitboard.h"

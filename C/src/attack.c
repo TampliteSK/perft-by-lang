@@ -1,4 +1,4 @@
-// attack.cpp
+// attack.c
 
 #include "attack.h"
 #include "attackgen.h"

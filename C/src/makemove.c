@@ -9,6 +9,18 @@
 // Functions based on VICE makemove.c by Richard Allbert
 // Incrementally updating Board class move by move for better efficiency
 
+// castling rights update constants
+const int castling_rights[64] = {
+     7, 15, 15, 15,  3, 15, 15, 11,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    13, 15, 15, 15, 12, 15, 15, 14
+};
+
 /*
 	Piece manipulation
 */

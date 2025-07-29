@@ -11,4 +11,5 @@ The C++ codebase is a simplified version of the one used in [Dragonrose](https:/
 |    Language   | Perft Depth / NPS |
 |:-------------:|:-----------------:|
 |      C++      |  Depth 6 / 26.6M  |
+|       C       |  Depth 5 / 12.4M  |
 |     Pony      | Depth 69 / 69.4M  |
