@@ -9,6 +9,6 @@ Core movegen is based on BBC (by Maksim Korzh) while board representation is bas
 
 ## Statistics
 |    Language   | Perft Depth / NPS |
-| ------------- | ----------------- |
+|:-------------:|:-----------------:|
 |      C++      |  Depth 6 / 26.6M  |
-|       C       |  Depth 5 / 69.4M  |
+|     Pony      | Depth 69 / 69.4M  |
