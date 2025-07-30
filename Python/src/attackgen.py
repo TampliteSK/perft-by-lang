@@ -172,25 +172,27 @@ def rook_attacks_on_the_fly(sq: Squares, blockers: Bitboard) -> Bitboard:
     return Bitboard(attacks)
 
 # get bishop attacks
-def get_bishop_attacks(sq: Squares, occupancy: int) -> Bitboard:
-    occ = occupancy & bishop_masks[sq.value]
+def get_bishop_attacks(sq: Squares, occupancy: Bitboard) -> Bitboard:
+    occ = int(occupancy & bishop_masks[sq.value])
     occ *= bishop_magic_numbers[sq.value]
-    occ >>= 64 - bishop_relevant_bits[sq.value]
-    try:
-        return bishop_attacks[sq.value][occ]
-    except Exception as e:
-        print(f"Error: Invalid occ {occ}")
-        raise e
+    occ >>= 64 - bishop_relevant_bits[sq.value] 
+    if occ >= len(bishop_attacks[sq.value]):
+        print(f"Debug: occ={occ}, sq={sq}, mask={int(bishop_masks[sq.value])}, occ_in={int(occupancy)}, magic={bishop_magic_numbers[sq.value]}, relbits={bishop_relevant_bits[sq.value]}")
+        occupancy.print_bitboard()
+        mask = Bitboard(bishop_masks[sq.value])
+        mask.print_bitboard()
+        raise ValueError(f"Invalid occ {occ} for bishop_attacks[{sq.value}]")
+    return bishop_attacks[sq.value][occ]
 
 # get rook attacks
-def get_rook_attacks(sq: Squares, occupancy: int) -> Bitboard:
-    occ = occupancy & rook_masks[sq.value]
+def get_rook_attacks(sq: Squares, occupancy: Bitboard) -> Bitboard:
+    occ = int(occupancy & rook_masks[sq.value])
     occ *= rook_magic_numbers[sq.value]
     occ >>= 64 - rook_relevant_bits[sq.value]
     return rook_attacks[sq.value][occ]
 
 # get queen attacks
-def get_queen_attacks(sq: Squares, occupancy: int) -> Bitboard:
+def get_queen_attacks(sq: Squares, occupancy: Bitboard) -> Bitboard:
     return Bitboard(get_bishop_attacks(sq, occupancy) | get_rook_attacks(sq, occupancy))
 
 """

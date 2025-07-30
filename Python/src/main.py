@@ -5,7 +5,9 @@ import Board
 import perft
 
 def main(argc: int, argv: list):
+    start = perft.get_time_ms()
     init_attack_tables()
+    print(f"Attack tables initialised in {perft.get_time_ms() - start}ms")
 
     pos = Board.Board()
     pos.reset_board()
