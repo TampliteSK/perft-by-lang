@@ -28,21 +28,23 @@ class Bitboard(int):
         """
         return Bitboard(self | (1 << square.value))
     
-    def clr_bit(self, square: Squares) -> 'Bitboard':
+    def clear_bit(self, square: Squares) -> 'Bitboard':
         """
         Clears the bit at the specified square.
         """
         return Bitboard(self & ~(1 << square.value))
     
-    def pop_ls1b(self) -> tuple[int, 'Bitboard']:
+    def pop_ls1b(self) -> tuple[Squares, 'Bitboard']:
         """
         Clears the least significant set bit and returns its index (0-63) and the new bitboard.
         """
         if self == 0:
-            return -1, self
+            print("Warning: Attempted to pop from an empty bitboard.")
+            return Squares.NO_SQ, self
+        
         index = (self & -self).bit_length() - 1
         new_bb = self & (self - 1)
-        return index, Bitboard(new_bb)
+        return Squares(index), Bitboard(new_bb)
         
     def count_bits(self) -> int:
         """

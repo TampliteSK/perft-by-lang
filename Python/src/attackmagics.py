@@ -1,7 +1,7 @@
 # attackmagics.py
 
 from enum import Enum
-from bitboard import Bitboard
+from Bitboard import Bitboard
 
 """
      not A file          not H file         not HG files      not AB files

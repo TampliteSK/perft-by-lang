@@ -1,8 +1,10 @@
 # Board.py
 
-from dataclass import dataclass
-from datatypes import Piece, Colour, Squares, CastlingRights
-from bitboard import Bitboard
+from dataclasses import dataclass, field
+from datatypes import Piece, Colour, Squares
+from Bitboard import Bitboard
+from Move import Move
+from typing import ClassVar
 
 def GET_RANK(sq): return (sq) // 8
 def GET_FILE(sq): return (sq) % 8
@@ -12,10 +14,10 @@ START_POS = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 @dataclass
 class UndoBox:
-	move: int
-	castle_perms: int
-	enpas: int
-	fifty_move: int
+	move: Move = Move()
+	castle_perms: int = 0
+	enpas: ClassVar[Squares] = Squares.NO_SQ
+	fifty_move: int = 0
 	
 class Board:
 	pieces: list[Piece]  # Square -> Piece
@@ -26,7 +28,7 @@ class Board:
 	king_sq: list[Squares]
 	side: Colour
 	enpas: Squares
-	castle_perms: CastlingRights
+	castle_perms: int
 	fifty_move: int  # Counter for 50-move rule
 
 	ply: int
@@ -44,7 +46,7 @@ class Board:
 		self.king_sq = [Squares.NO_SQ] * 3
 		self.side = Colour.WHITE
 		self.enpas = Squares.NO_SQ
-		self.castle_perms = CastlingRights(0)
+		self.castle_perms = 0
 		self.fifty_move = 0
 		self.ply = 0
 		self.his_ply = 0

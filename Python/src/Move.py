@@ -1,5 +1,7 @@
 # Move.py
 
+from datatypes import Piece, PType, Squares, ascii_squares, piece_type
+
 # Move encoding bit layout
 """
           binary move bits                               hexidecimal constants
@@ -16,13 +18,15 @@
 
 class Move(int):
     @staticmethod
-    def encode(source, target, piece, promoted, capture, double_adv, enpassant, castling):
+    def encode(source: Squares, target: Squares, piece: Piece, 
+               promoted: Piece, capture: Piece, 
+               double_adv: int, enpassant: int, castling: int):
         return Move(
-            (source)
-            | (target << 6)
-            | (piece << 12)
-            | (promoted << 16)
-            | (capture << 20)
+            (source.value)
+            | (target.value << 6)
+            | (piece.value << 12)
+            | (promoted.value << 16)
+            | (capture.value << 20)
             | (double_adv << 24)
             | (enpassant << 25)
             | (castling << 26)
@@ -31,27 +35,32 @@ class Move(int):
     @property
     def source(self):
         # source: bits 0-5
-        return self & 0x3f
+        source_index = self & 0x3f
+        return Squares(source_index)
 
     @property
     def target(self):
         # target: bits 6-11
-        return (self & 0xfc0) >> 6
+        target_index = (self & 0xfc0) >> 6
+        return Squares(target_index)
 
     @property
     def piece(self):
         # piece: bits 12-15
-        return (self & 0xf000) >> 12
+        piece_index = (self & 0xf000) >> 12
+        return Piece(piece_index)
 
     @property
     def promoted(self):
         # promoted: bits 16-19
-        return (self & 0xf0000) >> 16
+        promoted_index = (self & 0xf0000) >> 16
+        return Piece(promoted_index)
 
     @property
     def captured(self):
         # captured: bits 20-23
-        return (self & 0xf00000) >> 20
+        captured_index = (self & 0xf00000)
+        return Piece(captured_index)
 
     @property
     def double_push(self):
@@ -67,6 +76,24 @@ class Move(int):
     def castling(self):
         # castling: bit 26
         return bool(self & 0x4000000)
+    
+    # Print the move with UCI format
+    def print_move(self) -> str:
+        move_str = f"{ascii_squares[self.source.value]}{ascii_squares[self.target.value]}"
+
+        # Promoted pieces must be encoded in lowercase
+        promoted_piece = self.promoted
+        if promoted_piece:
+            if piece_type[promoted_piece] == PType.QUEEN:
+                move_str += "q"
+            elif piece_type[promoted_piece] == PType.ROOK:
+                move_str += "r"
+            elif piece_type[promoted_piece] == PType.BISHOP:
+                move_str += "b"
+            elif piece_type[promoted_piece] == PType.KNIGHT:
+                move_str += "n"
+
+        return move_str
 
 # MoveList class to hold a list of moves
 class MoveList:
@@ -87,3 +114,19 @@ class MoveList:
 
     def __len__(self):
         return self.length
+    
+    def print_move_list(self) -> None:
+        # Do nothing on empty move list
+        if self.length == 0:
+            print("\nMove list has no moves!")
+            return
+
+        print("Generated moves: ")
+
+        for i, move in enumerate(self.moves):
+            print(f"{move} ", end="")
+            if i % 5 == 4:
+                print()
+
+        # Print total number of moves
+        print(f"\nCount: {self.length}\n")

@@ -1,22 +1,10 @@
-// makemove.hpp
+# makemove_helper.py
 
-#ifndef MAKEMOVE_HPP
-#define MAKEMOVE_HPP
+PIN_ILLEGAL_TEST = "r1bqk1nr/pppp1ppp/2n5/4p3/1b2P3/2NP4/PPP2PPP/R1BQKBNR w KQkq - 3"
 
-#include <cstdint>
-#include "Board.hpp"
+NO_MOVE = 0
 
-#define PIN_ILLEGAL_TEST "r1bqk1nr/pppp1ppp/2n5/4p3/1b2P3/2NP4/PPP2PPP/R1BQKBNR w KQkq - 3"
-
-constexpr uint8_t NO_MOVE = 0;
-
-// Functions
-void take_move(Board *pos);
-bool make_move(Board *pos, int move);
-void make_null_move(Board *pos);
-void take_null_move(Board *pos);
-
-/*
+"""
                            castling   move     in      in
                               right update     binary  decimal
 
@@ -29,11 +17,10 @@ void take_null_move(Board *pos);
          black king moved:     1111 & 0011  =  1011    3
   black king's rook moved:     1111 & 1011  =  1011    11
  black queen's rook moved:     1111 & 0111  =  0111    7
+"""
 
-*/
-
-// castling rights update constants
-const int castling_rights[64] = {
+# castling rights update constants
+castling_rights = (
      7, 15, 15, 15,  3, 15, 15, 11,
     15, 15, 15, 15, 15, 15, 15, 15,
     15, 15, 15, 15, 15, 15, 15, 15,
@@ -42,7 +29,4 @@ const int castling_rights[64] = {
     15, 15, 15, 15, 15, 15, 15, 15,
     15, 15, 15, 15, 15, 15, 15, 15,
     13, 15, 15, 15, 12, 15, 15, 14
-};
-
-
-#endif // MAKEMOVE_HPP
+)

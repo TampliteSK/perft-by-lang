@@ -59,6 +59,48 @@ class Squares(Enum):
     a1 = 56; b1 = 57; c1 = 58; d1 = 59; e1 = 60; f1 = 61; g1 = 62; h1 = 63
     NO_SQ = 64
 
+    def __eq__(self, other):
+        if isinstance(other, Squares):
+            return self.value == other.value
+        if isinstance(other, int):
+            return self.value == other
+        return NotImplemented
+
+    def __ne__(self, other):
+        if isinstance(other, Squares):
+            return self.value != other.value
+        if isinstance(other, int):
+            return self.value != other
+        return NotImplemented
+
+    def __lt__(self, other):
+        if isinstance(other, Squares):
+            return self.value < other.value
+        if isinstance(other, int):
+            return self.value < other
+        return NotImplemented
+
+    def __le__(self, other):
+        if isinstance(other, Squares):
+            return self.value <= other.value
+        if isinstance(other, int):
+            return self.value <= other
+        return NotImplemented
+
+    def __gt__(self, other):
+        if isinstance(other, Squares):
+            return self.value > other.value
+        if isinstance(other, int):
+            return self.value > other
+        return NotImplemented
+
+    def __ge__(self, other):
+        if isinstance(other, Squares):
+            return self.value >= other.value
+        if isinstance(other, int):
+            return self.value >= other
+        return NotImplemented
+
 Mirror64 = (
     56, 57, 58, 59, 60, 61, 62, 63,
     48, 49, 50, 51, 52, 53, 54, 55,

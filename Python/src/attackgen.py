@@ -1,7 +1,7 @@
 # attackgen.py
 
 from datatypes import Squares, Colour
-from bitboard import Bitboard
+from Bitboard import Bitboard
 from attackmagics import bishop_magic_numbers, rook_magic_numbers, bishop_relevant_bits, rook_relevant_bits, not_a_file, not_h_file, not_hg_file, not_ab_file
 
 # Attack tables and masks
@@ -172,22 +172,26 @@ def rook_attacks_on_the_fly(sq: Squares, blockers: Bitboard) -> Bitboard:
     return Bitboard(attacks)
 
 # get bishop attacks
-def get_bishop_attacks(sq: int, occupancy: int) -> int:
-    occ = occupancy & bishop_masks[sq]
-    occ *= bishop_magic_numbers[sq]
-    occ >>= 64 - bishop_relevant_bits[sq]
-    return bishop_attacks[sq][occ]
+def get_bishop_attacks(sq: Squares, occupancy: int) -> Bitboard:
+    occ = occupancy & bishop_masks[sq.value]
+    occ *= bishop_magic_numbers[sq.value]
+    occ >>= 64 - bishop_relevant_bits[sq.value]
+    try:
+        return bishop_attacks[sq.value][occ]
+    except Exception as e:
+        print(f"Error: Invalid occ {occ}")
+        raise e
 
 # get rook attacks
-def get_rook_attacks(sq: int, occupancy: int) -> int:
-    occ = occupancy & rook_masks[sq]
-    occ *= rook_magic_numbers[sq]
-    occ >>= 64 - rook_relevant_bits[sq]
-    return rook_attacks[sq][occ]
+def get_rook_attacks(sq: Squares, occupancy: int) -> Bitboard:
+    occ = occupancy & rook_masks[sq.value]
+    occ *= rook_magic_numbers[sq.value]
+    occ >>= 64 - rook_relevant_bits[sq.value]
+    return rook_attacks[sq.value][occ]
 
 # get queen attacks
-def get_queen_attacks(sq: int, occupancy: int) -> int:
-    return get_bishop_attacks(sq, occupancy) | get_rook_attacks(sq, occupancy)
+def get_queen_attacks(sq: Squares, occupancy: int) -> Bitboard:
+    return Bitboard(get_bishop_attacks(sq, occupancy) | get_rook_attacks(sq, occupancy))
 
 """
     Master functions
@@ -196,10 +200,11 @@ def get_queen_attacks(sq: int, occupancy: int) -> int:
 # init leaper pieces attacks
 def init_leapers_attacks():
     for square in Squares:
-        pawn_attacks[Colour.WHITE.value][square.value] = mask_pawn_attacks(Colour.WHITE, square)
-        pawn_attacks[Colour.BLACK.value][square.value] = mask_pawn_attacks(Colour.BLACK, square)
-        knight_attacks[square.value] = mask_knight_attacks(square)
-        king_attacks[square.value] = mask_king_attacks(square)
+        if square != Squares.NO_SQ:
+            pawn_attacks[Colour.WHITE.value][square.value] = mask_pawn_attacks(Colour.WHITE, square)
+            pawn_attacks[Colour.BLACK.value][square.value] = mask_pawn_attacks(Colour.BLACK, square)
+            knight_attacks[square.value] = mask_knight_attacks(square)
+            king_attacks[square.value] = mask_king_attacks(square)
 
 # set occupancies
 def set_occupancy(index: int, bits_in_mask: int, attack_mask: Bitboard) -> Bitboard:
@@ -210,26 +215,27 @@ def set_occupancy(index: int, bits_in_mask: int, attack_mask: Bitboard) -> Bitbo
         if square == -1:
             break
         if index & (1 << count):
-            occupancy |= (1 << square)
+            occupancy.set_bit(square)
     return Bitboard(occupancy)
 
 
 # init slider piece's attack tables
 def init_sliders_attacks(bishop: bool):
     for square in Squares:
-        bishop_masks[square.value] = mask_bishop_attacks(square)
-        rook_masks[square.value] = mask_rook_attacks(square)
-        attack_mask = bishop_masks[square.value] if bishop else rook_masks[square.value]
-        relevant_bits_count = attack_mask.count_bits()
-        occupancy_indices = 1 << relevant_bits_count
-        for index in range(occupancy_indices):
-            occupancy = set_occupancy(index, relevant_bits_count, attack_mask)
-            if bishop:
-                magic_index = (occupancy * bishop_magic_numbers[square.value]) >> (64 - bishop_relevant_bits[square.value])
-                bishop_attacks[square.value][magic_index] = bishop_attacks_on_the_fly(square, occupancy)
-            else:
-                magic_index = (occupancy * rook_magic_numbers[square.value]) >> (64 - rook_relevant_bits[square.value])
-                rook_attacks[square.value][magic_index] = rook_attacks_on_the_fly(square, occupancy)
+        if square != Squares.NO_SQ:
+            bishop_masks[square.value] = mask_bishop_attacks(square)
+            rook_masks[square.value] = mask_rook_attacks(square)
+            attack_mask = bishop_masks[square.value] if bishop else rook_masks[square.value]
+            relevant_bits_count = attack_mask.count_bits()
+            occupancy_indices = 1 << relevant_bits_count
+            for index in range(occupancy_indices):
+                occupancy = set_occupancy(index, relevant_bits_count, attack_mask)
+                if bishop:
+                    magic_index = (occupancy * bishop_magic_numbers[square.value]) >> (64 - bishop_relevant_bits[square.value])
+                    bishop_attacks[square.value][magic_index] = bishop_attacks_on_the_fly(square, occupancy)
+                else:
+                    magic_index = (occupancy * rook_magic_numbers[square.value]) >> (64 - rook_relevant_bits[square.value])
+                    rook_attacks[square.value][magic_index] = rook_attacks_on_the_fly(square, occupancy)
 
 
 def init_attack_tables():
