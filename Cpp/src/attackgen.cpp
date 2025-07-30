@@ -13,7 +13,7 @@ Bitboard bishop_attacks[64][512] = { {0} }; // bishop attacks table [square][occ
 Bitboard rook_attacks[64][4096] = { {0} };  // rook attacks table [square][occupancies]
 
 /*
-    Sliders attackgen
+    Leapers attackgen
 */
 
 // generate pawn attacks
@@ -76,7 +76,7 @@ Bitboard mask_king_attacks(int sq) {
 }
 
 /*
-    Leapers attackgen
+    Sliders attackgen
 */
 
 // mask bishop attacks

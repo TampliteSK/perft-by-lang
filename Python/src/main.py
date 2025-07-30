@@ -1,11 +1,11 @@
 # main.py
 
-import attackgen
+from attackgen import init_attack_tables
 import Board
 import perft
 
 def main(argc: int, argv: list):
-    attackgen.init_attack_tables()
+    init_attack_tables()
 
     pos = Board.Board()
     pos.reset_board()

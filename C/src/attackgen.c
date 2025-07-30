@@ -19,7 +19,7 @@ const Bitboard not_hg_file = 4557430888798830399ULL; // not HG file constant
 const Bitboard not_ab_file = 18229723555195321596ULL; // not AB file constant
 
 /*
-    Sliders attackgen
+    Leapers attackgen
 */
 
 // generate pawn attacks
@@ -82,7 +82,7 @@ Bitboard mask_king_attacks(int sq) {
 }
 
 /*
-    Leapers attackgen
+    Sliders attackgen
 */
 
 // mask bishop attacks

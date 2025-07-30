@@ -5,14 +5,6 @@
 
 #include "Board.hpp"
 
-constexpr uint16_t MAX_LEGAL_MOVES = 280;
-
-// Use an array wrapper instead of vector for efficiency
-typedef struct {
-    int moves[MAX_LEGAL_MOVES];
-    uint16_t length;
-} MoveList;
-
 // Functions
 void init_move_list(MoveList& move_list);
 void generate_moves(const Board *pos, MoveList& move_list, bool noisy_only);

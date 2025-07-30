@@ -1,15 +1,8 @@
-// moveio.cpp
+# moveio.py
 
-#include "moveio.hpp"
-#include "movegen.hpp"
-#include "datatypes.hpp"
-
-#include <iostream>
-#include <string>
-#include <sstream>
-
-// print move (for UCI purposes)
-std::string print_move(int move) {
+# print move (for UCI purposes)
+def print_move(move: int) -> str:
+    
     std::ostringstream oss;
     oss << ascii_squares[get_move_source(move)]
         << ascii_squares[get_move_target(move)];
