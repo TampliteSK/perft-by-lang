@@ -1,94 +1,62 @@
-# bitboard.py: A class wrapper over int with common bitboard operations
+# bitboard.py: Bitboard operation functions. No class as overhead is too high
 
-from datatypes import Squares
+from datatypes import Squares, Mirror64
 
-class Bitboard(int):
+type Bitboard = int
+
+# Common bitboard operations
+def get_bit(bitboard: int, square: Squares) -> int:
     """
-    A class representing a bitboard, which is a 64-bit integer used to represent
-    the state of a chessboard.
+    Returns the bit at the specified square.
     """
+    return (bitboard >> square.value) & 1
     
-    # Creates an instance, no __init__ required
-    def __new__(cls, value=0):
-        return super().__new__(cls, value)
+def set_bit(bitboard: int, square: Squares) -> int:
+    """
+    Sets the bit at the specified square.
+    """
+    return bitboard | (1 << square.value)
+    
+def clear_bit(bitboard: int, square: Squares) -> int:
+    """
+    Clears the bit at the specified square.
+    """
+    return bitboard & ~(1 << square.value)
 
-    def __str__(self):
-        return f"Bitboard({self:#018x})"
-
-    # Common bitboard operations
-    def get_bit(self, square: Squares) -> int:
-        """
-        Returns the bit at the specified square.
-        """
-        return (self >> square.value) & 1
+def pop_ls1b(bitboard: int) -> tuple[Squares, int]:
+    """
+    Clears the least significant set bit and returns its square index
+    """
+    bitboard &= 0xFFFFFFFFFFFFFFFF  # Ensure unsigned 64-bit
+    if bitboard == 0:
+        print("Warning: Attempted to pop from an empty bitboard.")
+        return Squares.NO_SQ, bitboard
     
-    def set_bit(self, square: Squares) -> 'Bitboard':
-        """
-        Sets the bit at the specified square.
-        """
-        return Bitboard(self | (1 << square.value))
-    
-    def clear_bit(self, square: Squares) -> 'Bitboard':
-        """
-        Clears the bit at the specified square.
-        """
-        return Bitboard(self & ~(1 << square.value))
-    
-    def pop_ls1b(self) -> tuple[Squares, 'Bitboard']:
-        """
-        Clears the least significant set bit and returns its index (0-63) and the new bitboard.
-        """
-        if self == 0:
-            print("Warning: Attempted to pop from an empty bitboard.")
-            return Squares.NO_SQ, self
+    index = (bitboard & -bitboard).bit_length() - 1
+    bb = bitboard & (bitboard - 1)
+    return Squares(index), bb
         
-        index = (self & -self).bit_length() - 1
-        new_bb = self & (self - 1)
-        return Squares(index), Bitboard(new_bb)
-        
-    def count_bits(self) -> int:
-        """
-        Counts the number of bits set in the bitboard.
-        """
-        return bin(self).count('1')
-    
-    # Bitwise operations
-    def __and__(self, other: 'Bitboard') -> 'Bitboard':
-        return Bitboard(super().__and__(other))
+def count_bits(bitboard: int) -> int:
+    """
+    Counts the number of bits set in the bitboard.
+    """
+    return (bitboard & 0xFFFFFFFFFFFFFFFF).bit_count()
 
-    def __or__(self, other: 'Bitboard') -> 'Bitboard':
-        return Bitboard(super().__or__(other))
-
-    def __xor__(self, other: 'Bitboard') -> 'Bitboard':
-        return Bitboard(super().__xor__(other))
-
-    def __invert__(self) -> 'Bitboard':
-        return Bitboard(super().__invert__())
-
-    # In-place bitwise operations
-    def __iand__(self, other: 'Bitboard') -> 'Bitboard':
-        return self.__and__(other)
-
-    def __ior__(self, other: 'Bitboard') -> 'Bitboard':
-        return self.__or__(other)
-
-    def __ixor__(self, other: 'Bitboard') -> 'Bitboard':
-        return self.__xor__(other)
-
-    # Output
-    def print_bitboard(self):
-        """
-        Prints the bitboard in a human-readable format.
-        """
-        print("\n")
-        for rank in range(7, -1, -1):
-            print(f"{rank + 1}   ", end="")
-            for file in range(8):
-                sq = rank * 8 + file
-                if self.get_bit(Squares(sq)):
-                    print("X", end="")
-                else:
-                    print("-", end="")
-            print()
-        print("  ABCDEFGH\n")
-        print(f"Bits set: {self.count_bits()}\n")
+def print_bitboard(bitboard: int) -> None:
+    """
+    Prints the bitboard in a human-readable format.
+    """
+    print("\n")
+    for rank in range(8):
+        print(f"{8 - rank}   ", end="")
+        for file in range(8):
+            sq = rank * 8 + file
+            if get_bit(bitboard, Squares(sq)):
+                print("X", end="")
+            else:
+                print("-", end="")
+        print()
+    print("    ABCDEFGH\n")
+    print(f"Bits set: {count_bits(bitboard)}")
+    print(f"Value: {bitboard}\n")
+    return

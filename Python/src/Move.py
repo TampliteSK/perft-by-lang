@@ -59,23 +59,23 @@ class Move(int):
     @property
     def captured(self):
         # captured: bits 20-23
-        captured_index = (self & 0xf00000)
+        captured_index = (self & 0xf00000) >> 20
         return Piece(captured_index)
 
     @property
     def double_push(self):
         # double push: bit 24
-        return bool(self & 0x1000000)
+        return bool(self & 0x1000000) >> 24
 
     @property
     def enpassant(self):
         # enpassant: bit 25
-        return bool(self & 0x2000000)
+        return bool(self & 0x2000000) >> 25
 
     @property
     def castling(self):
         # castling: bit 26
-        return bool(self & 0x4000000)
+        return bool(self & 0x4000000) >> 26
     
     # Print the move with UCI format
     def print_move(self) -> str:
@@ -115,7 +115,7 @@ class MoveList:
     def __len__(self):
         return self.length
     
-    def print_move_list(self) -> None:
+    def print_list(self) -> None:
         # Do nothing on empty move list
         if self.length == 0:
             print("\nMove list has no moves!")
@@ -124,7 +124,7 @@ class MoveList:
         print("Generated moves: ")
 
         for i, move in enumerate(self.moves):
-            print(f"{move} ", end="")
+            print(f"{move.print_move()} ", end="")
             if i % 5 == 4:
                 print()
 

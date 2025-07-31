@@ -1,7 +1,6 @@
 # attackmagics.py
 
 from enum import Enum
-from Bitboard import Bitboard
 
 """
      not A file          not H file         not HG files      not AB files
@@ -19,10 +18,10 @@ from Bitboard import Bitboard
     a b c d e f g h    a b c d e f g h    a b c d e f g h    a b c d e f g h
 """
 
-not_a_file  = Bitboard(18374403900871474942) # not A file constant
-not_h_file  = Bitboard(9187201950435737471)  # not H file constant
-not_hg_file = Bitboard(4557430888798830399)  # not HG file constant
-not_ab_file = Bitboard(18229723555195321596) # not AB file constant
+not_a_file  = 18374403900871474942 # not A file constant
+not_h_file  = 9187201950435737471  # not H file constant
+not_hg_file = 4557430888798830399  # not HG file constant
+not_ab_file = 18229723555195321596 # not AB file constant
 
 # bishop relevant occupancy bit count for every square on board
 bishop_relevant_bits = (

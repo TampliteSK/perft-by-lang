@@ -33,18 +33,20 @@ def run_perft(pos: Board, depth: int, print_info: bool) -> int:
         return 0
 
     nodes = 0
-    start = 0
+    start = get_time_ms()
 
     move_list = MoveList()
-    generate_moves(pos, move_list, False)
+    move_list = generate_moves(pos, move_list, False)
+    # move_list.print_list()
 
     if print_info:
         print("\n     Performance test\n")
         start = get_time_ms()
 
-    for move in move_list:
-        # Skip illegal moves
-        if not make_move(pos, move):
+    for move in move_list.moves:
+        move_is_legal, pos = make_move(pos, move)
+        if not move_is_legal:
+            print(f"Illegal move: {move.print_move()}")
             continue
 
         old_nodes = nodes
@@ -60,7 +62,7 @@ def run_perft(pos: Board, depth: int, print_info: bool) -> int:
 
         # Print move if root level
         if (print_info):
-            print(f"{move}: {new_nodes}")
+            print(f"{move.print_move()}: {new_nodes}")
 
     # Print results if root level
     if print_info:

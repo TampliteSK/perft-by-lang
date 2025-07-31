@@ -2,7 +2,7 @@
 
 from datatypes import piece_type, piece_col, Piece, Squares, Colour, PType
 from Board import Board
-from Bitboard import Bitboard
+from bitboard import Bitboard
 from attackgen import pawn_attacks, knight_attacks, king_attacks, get_bishop_attacks, get_rook_attacks, get_queen_attacks
 
 # Check if the current square is attacked by a given side
@@ -31,4 +31,4 @@ def get_piece_attacks(pos: Board, pce: Piece, sq: Squares) -> Bitboard:
     if (piece_type[pce] ==   PType.ROOK): return get_rook_attacks(sq, pos.occupancies[Colour.BOTH.value])
     if (piece_type[pce] ==  PType.QUEEN): return get_queen_attacks(sq, pos.occupancies[Colour.BOTH.value])
     if (piece_type[pce] ==   PType.KING): return king_attacks[sq.value]
-    return Bitboard()
+    return 0

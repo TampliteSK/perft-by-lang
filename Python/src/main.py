@@ -3,18 +3,31 @@
 from attackgen import init_attack_tables
 import Board
 import perft
+import cProfile
+from bitboard import *
+from datatypes import *
+from Move import Move
+from makemove import make_move
 
 def main(argc: int, argv: list):
+    
+    # profiler = cProfile.Profile()
+    # profiler.enable()
     start = perft.get_time_ms()
     init_attack_tables()
     print(f"Attack tables initialised in {perft.get_time_ms() - start}ms")
+    # profiler.disable()
+    # profiler.print_stats(sort='cumtime')  # Sort by cumulative time
 
     pos = Board.Board()
     pos.reset_board()
     pos.parse_fen(Board.START_POS)
-    # print_board(pos);
+    #pos.print_board()
+    #move = Move.encode(Squares.a2, Squares.a3, Piece.wP, Piece.EMPTY, Piece.EMPTY, 1, 0, 0)
+    #make_move(pos, move)
+    #pos.print_board()
 
-    perft_depth = 4
+    perft_depth = 3
     if argc > 1:
         input = int(argv[1])
         if input < 1 or input > 10:

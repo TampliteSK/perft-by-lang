@@ -2,9 +2,9 @@
 
 from dataclasses import dataclass, field
 from datatypes import Piece, Colour, Squares
-from Bitboard import Bitboard
 from Move import Move
 from typing import ClassVar
+from bitboard import *
 
 def GET_RANK(sq): return (sq) // 8
 def GET_FILE(sq): return (sq) % 8
@@ -40,8 +40,8 @@ class Board:
 	
 	def reset_board(self):
 		self.pieces = [Piece.EMPTY] * 64
-		self.bitboards = [Bitboard() for _ in range(13)]
-		self.occupancies = [Bitboard() for _ in range(3)]
+		self.bitboards = [0 for _ in range(13)]
+		self.occupancies = [0 for _ in range(3)]
 		self.piece_num = [0] * 13
 		self.king_sq = [Squares.NO_SQ] * 3
 		self.side = Colour.WHITE
@@ -55,10 +55,10 @@ class Board:
 	def update_vars(self):
 		from datatypes import piece_type, piece_col, PType
 		for pce in Piece:
-			self.piece_num[pce.value] = self.bitboards[pce.value].count_bits()
+			self.piece_num[pce.value] = count_bits(self.bitboards[pce.value])
 			if piece_type[pce] == PType.KING:
 				copy = self.bitboards[pce.value]
-				sq, _ = copy.pop_ls1b()
+				sq, _ = pop_ls1b(copy)
 				self.king_sq[piece_col[pce].value] = Squares(sq)
 
 	def parse_fen(self, fen: str):
@@ -101,13 +101,13 @@ class Board:
 				break
 			else:
 				raise ValueError(f"Invalid FEN character: {c}")
-			for i in range(count):
+			for _ in range(count):
 				sq = rank * 8 + file
 				if piece != Piece.EMPTY:
 					self.pieces[sq] = piece
-					self.bitboards[piece.value] = self.bitboards[piece.value].set_bit(Squares(sq))
-					self.occupancies[Colour.BOTH.value] = self.occupancies[Colour.BOTH.value].set_bit(Squares(sq))
-					self.occupancies[piece_col[piece].value] = self.occupancies[piece_col[piece].value].set_bit(Squares(sq))
+					self.bitboards[piece.value] = set_bit(self.bitboards[piece.value], Squares(sq))
+					self.occupancies[Colour.BOTH.value] = set_bit(self.occupancies[Colour.BOTH.value], Squares(sq))
+					self.occupancies[piece_col[piece].value] = set_bit(self.occupancies[piece_col[piece].value], Squares(sq))
 				file += 1
 			pfen += 1
 		# Side to move
